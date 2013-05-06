@@ -1,0 +1,30 @@
+{
+  "name": "everymote-geiger",
+  "version": "0.0.1",
+  "description": "Connect a geiger counter to everymote",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/everymote/everymote-node-seed.git"
+  },
+  "keywords": [
+    "iot",
+    "Internet",
+    "of",
+    "Things",
+    "everymote",
+    "geiger counter"
+  ],
+  "author": "Marcus Olsson",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "gitHead": "8d10a6b5cab378747acb5d26a454c6d9f6edc048",
+  "dependencies": {
+    "socket.io-client": "~0.9.11",
+    "serialport": "~1.1.0",
+    "cosm": "0.0.3"
+  }
+}
