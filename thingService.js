@@ -55,7 +55,7 @@ var handleData = function(data){
 	}
 };
 
-var lisener = function(thing){
+var startLisener = function(){
 	serialPort.on('data', function (jsonData)
 	{
 		try
@@ -91,6 +91,7 @@ var createThing = function(){
 		"actionControles": []
 	};	
    things.sound = thing;
+   startLisener();
    return thing;
 };
 
