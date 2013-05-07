@@ -3,11 +3,13 @@ var config = require('./config');
   var cosm = require('cosm'),
         client = new cosm.Cosm(config.cosm.apiKey),
         feed = new cosm.Feed(cosm, {id: config.cosm.feed}),
-        //streamCpm = new cosm.Datastream(client, feed, {id: 2}),
-        //streamSv = new cosm.Datastream(client, feed, {id: 3}),
+        streamCpm = new cosm.Datastream(client, feed, {id: 2, queue_size: 20}),
+        streamSv = new cosm.Datastream(client, feed, {id: 3, queue_size: 20}),
         streamHumidity = new cosm.Datastream(client, feed, {id: 4, queue_size: 20}),
         streamTemperature = new cosm.Datastream(client, feed, {id: 5, queue_size: 20}),
-		streamSound = new cosm.Datastream(client, feed, {id: 6, queue_size: 20});
+	streamSound = new cosm.Datastream(client, feed, {id: 6, queue_size: 20});
+
+var things = {};
 
 var arduinoSerialPort = config.serial;
 
@@ -26,6 +28,17 @@ temperatureHandler = function(data){
 },
 soundHandler = function(data){
 	streamSound.addPoint(data.value);
+	if(thing.sound.socket){
+		thing.sound.socket.emit('updateInfo', data.value);
+	}
+},
+geigerHandler = function(data){
+	streamCpm.addPoint(data.cpm);
+	streamSv.addPoint(data.radiationValue);
+	
+	if(thing.geiger.socket){
+		thing.geiger.socket.emit('updateInfo', "CPM: " + data.cpm + " - " + data.radiationValue + " uSv/h");
+	}
 };
 
 var dataHandlers = { 
@@ -66,18 +79,19 @@ var lisener = function(thing){
 	});
 };
 
+
 var createThing = function(){
     
-	var thing = {};
+   var thing = {};
     thing.settings = { 
-		"name": 'Geiger Counter',
-		"id": 2345622,
+		"name": 'Sound',
+		"id": 23435672,
 		"iconType": "Information",
 		//"position": config.getPosition(),
 		"actionControles": []
 	};	
-	lisener(thing);
-	return thing;
+   things.sound = thing;
+   return thing;
 };
 
 module.exports.thing = createThing();
